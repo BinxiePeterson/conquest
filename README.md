@@ -1,3 +1,3 @@
 # Conquest Analytics & Training
 
-## Teaching material for myself
+## Teaching material
