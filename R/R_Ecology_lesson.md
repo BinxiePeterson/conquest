@@ -1,0 +1,305 @@
+Introduction to R and RStudio
+========================================================
+author: Bianca Peterson (PhD)
+width: 1300
+height: 768
+transition: rotate
+incremental: false
+
+<div class="left">
+<img src="figures/LOGO.PNG" alt="Company logo" width="400" height="220" align="left"></img>
+</div>
+
+What is R and RStudio?
+========================================================
+
+- R -> both the programming language and the software that interprets the scripts
+- RStudio -> a front end (interface) to R, which makes using R a lot nicer
+
+Why learn R?
+========================================================
+
+- R doesn't involve lots of pointing and clicking - easy to redo analysis if you collected more data
+
+- R code is great for reproducibility - obtain same results from same dataset using same analysis
+
+- R is extensible and interdisciplinary - ~14,000 packages to extend its capabilities, and statistical approaches from many scientific disciplines can be combined
+
+- R works on data of all shapes and sizes - it is designed for data analysis
+
+- R produces high-quality graphics - can adjust any aspect of your graph
+
+- R has a large community - mailing lists and websites (Stack Overflow)
+
+- R is open-source and cross-platform - Anyone can inspect the source code - less chance for mistakes
+       
+Layout of RStudio
+========================================================
+
+<center>
+<img src="figures/Layout2.png" width="800" height="600" align="middle"></img>
+</center>
+
+Credit: Jessica Ward, PhD Student, Newcastle University
+       
+Create a new project
+========================================================
+   
+- Good practice -> keep a set of related data, analyses and text in single folder called the "working directory"
+- You can easily share it with others without worrying about whether or not underlying scripts will still work
+- Only ever use relative paths and not absolute paths
+
+Absolute vs relative paths
+========================================================
+
+<center>
+<img src="figures/Absolute_vs_relative.png" width="800" height="600" align="middle"></img>
+</center>
+
+
+========================================================
+   
+<center>
+<img src="figures/Practical.png" width="800" height="600" align="middle"></img>
+</center>
+
+
+Your working directory should look like this
+========================================================
+   
+<center>
+<img src="figures/File_structure.png" width="600" height="600" align="middle"></img>
+</center>
+
+
+Interacting with R
+========================================================
+   
+- We write code/instructions = commands
+- The computer executes/runs those commands
+
+- Two ways to interact with R:
+  - Type in the console and press Enter to execute -> forgotten when closed
+  - Type in script editor and press Ctrl + Enter -> save code and workflow
+
+- Prompt > is displayed when R is ready to accept commands
+- Receives commands (typing, copy-pasting or sent from script editor) -> execute -> show results -> new prompt
+- If R waits for more data -> will show a + prompt, which means you haven't finished entering a complete command
+- Either enter the missing letter/value/symbol or click inside the console and press Esc
+       
+Seeking help
+========================================================
+
+- Where to ask for help:
+  - Friendly colleagues
+  - Stack Overflow: http://stackoverflow.com/questions/tagged/r
+  - R-help mailing list: https://stat.ethz.ch/mailman/listinfo/r-help
+     - Use correct vocabulary
+     - Check for package-specific mailing lists
+     - List of topic-specific mailing lists: http://www.r-project.org/mail.html
+
+- Use built-in RStudio help interface (bottom-right panel)
+- ??function
+ 
+ 
+========================================================
+   
+<center>
+<img src="figures/Practical.png" width="800" height="600" align="middle"></img>
+</center>
+
+
+Structure of R expressions
+========================================================
+ 
+<center>
+<img src="figures/R_expressions.png" width="800" height="100" align="bottom"></img>
+</center>
+ 
+- object = can be any word you like, but avoid dots (and no spaces!)
+  - also watch out for existing function names
+- <- = assignment operator
+- function = name of the function followed directly by ()
+  - Example: x <- round(3.14159)
+- arguments = specified within the () of the function, separated by commas
+  - Example: x <- round(3.14159, digits = 2)
+
+
+========================================================
+   
+<center>
+<img src="figures/Practical.png" width="800" height="600" align="middle"></img>
+</center>
+
+
+Data structures vs Data types
+========================================================
+
+- Data structures:
+  - Vector
+  - Matrix
+  - Array
+  - Data Frame
+  - List
+  - Factor
+  
+---
+
+- Data types:
+  - Numeric
+  - Integer
+  - Complex
+  - Logical
+  - Character
+
+       
+Data structures
+========================================================
+
+<center>
+<img src="figures/data_structures.png" width="700" height="700" align="center"></img>
+</center>
+
+<small>
+Credit: Maite Ceballos (IFCA) & Nicolas Cardiel (UCM)
+http://venus.ifca.unican.es/Rintro/dataStruct.html
+</small>
+
+---
+
+<small>
+- Vector: one-dimensional array used to store collection data of the same mode.
+- Matrix: two-dimensional array to store collections of data of the same mode.
+- Array: similar to matrix, but can be multi-dimensional.
+- Factor: vector of categorical variables designed to group the components.
+- Data Frame: similar to matrices, but different columns can store different mode data.
+- List: ordered collection of objects, where the elements can be of different types.
+</small>
+      
+       
+Data types
+========================================================
+
+<center>
+<img src="figures/data_types.png" width="600" height="600" align="center"></img>
+</center>
+
+<small>
+Credit: Venkatesan Prabu .J (Wikitechy)
+https://www.wikitechy.com/tutorials/r-programming/r-datatypes-vectors
+</small>
+
+
+========================================================
+   
+<center>
+<img src="figures/Practical.png" width="800" height="600" align="middle"></img>
+</center>
+
+
+Factors
+========================================================
+
+<center>
+<img src="figures/Handbag.png" width="600" height="700" align="middle"></img>
+</center>
+
+
+========================================================
+   
+<center>
+<img src="figures/Practical.png" width="800" height="600" align="middle"></img>
+</center>
+
+
+Formatting dates
+========================================================
+
+<center>
+<img src="figures/lubridate_parsing.png" width="800" height="400" align="middle"></img>
+</center>
+
+<small>
+Credit: UC Business Analytics R Programming Guide, http://uc-r.github.io/dates/ 
+</small>
+
+Formatting dates
+========================================================
+
+<center>
+<img src="figures/Date_formats.png" width="800" height="400" align="middle"></img>
+</center>
+
+<small>
+Credit: Aridhia, https://www.aridhia.com/technical-tutorials/working-with-dates-in-r/
+</small>
+
+========================================================
+   
+<center>
+<img src="figures/Practical.png" width="800" height="600" align="middle"></img>
+</center>
+
+Data manipulation using dplyr and tidyr packages
+========================================================
+ 
+- dplyr package makes tabular data manipulation easier
+- tidyr package enables you to convert between different data formats for plotting and analysis
+- New functions/analyses are developed and made available via packages
+- Packages = additional functions that let you do more stuff
+- Install package once - install.packages()
+- Load pacakage with every R session when you need it
+- tidyverse = umbrella package that installs several packages
+
+========================================================
+   
+<center>
+<img src="figures/Practical.png" width="800" height="600" align="middle"></img>
+</center>
+
+Pipes
+========================================================
+
+## Insert image
+
+Split-apply-combine analysis
+========================================================
+
+## Insert image
+
+- Split data into groups > apply some analysis to each group > combine results
+- It collapses each group into a single-row summary of that group
+
+Reshaping your data: spread
+========================================================
+
+<center>
+<img src="figures/spread.png" width="800" height="600" align="middle"></img>
+</center>
+
+Reshaping your data: gather
+========================================================
+
+<center>
+<img src="figures/gather.png" width="800" height="600" align="middle"></img>
+</center>
+
+
+
+========================================================
+   
+<center>
+<img src="figures/Practical.png" width="800" height="600" align="middle"></img>
+</center>
+
+
+Data visualization: building plots iteratively
+========================================================
+   
+## Insert image
+
+========================================================
+   
+<center>
+<img src="figures/Practical.png" width="800" height="600" align="middle"></img>
+</center>
