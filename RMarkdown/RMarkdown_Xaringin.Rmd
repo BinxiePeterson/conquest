@@ -1,0 +1,1735 @@
+---
+title: ".red[R Markdown]"
+subtitle: "Reproducible Report Writing"
+author: "<br><br>Bianca Peterson (PhD)<br>`r anicon::faa('twitter', animate='pulse', color='dodgerblue')`&nbsp;`r anicon::faa('github', animate='pulse', rtext='&nbsp;.dodgerblue[@binxiepeterson]')`<br>`r anicon::aia('orcid',color='chartreuse', animate='pulse')`&nbsp;.lawngreen[0000-0001-6927-9159]"
+institute: "<br>`r anicon::cia('figures/LOGO.png', animate=FALSE)`&nbsp;.teal[Conquest Analytics and Training] <br>`r anicon::cia('figures/NWU.gif', animate=FALSE)`&nbsp;.nwupurple[North-West University]<br>"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu", "my-style.css", "academicons-1.8.6/academicons-1.8.6/css/academicons.min.css"]
+    seal: true
+    self-contained: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+params:
+  institution:
+    choices:
+    - California Institute of Technology
+    - Trieste Polytechnic Institute
+    - CODATA-RDA Summer School
+    - Elsevier Inc
+    input: select
+    label: 'Institution:'
+    value: Trieste Polytechnic Institute
+---
+
+```{r setup, include=FALSE}
+
+options(htmltools.dir.version = FALSE)
+library(ggplot2)
+library(plotly)
+library(dplyr)
+library(knitr)
+library(pander)
+
+```
+
+```{r xaringan-themer, include=FALSE}
+
+library(xaringanthemer)
+
+```
+
+```{r global_options, include=FALSE}
+
+# Set global options for chunk options
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE)
+
+```
+
+class: inverse
+
+# .center[What is R Markdown?]
+
+<br>
+
+### - R Markdown = text + code + output (graphs, tables, etc.)
+
+--
+
+### - R Markdown uses Markdown syntax
+
+--
+
+### - Markdown = simple 'markup' language that uses plain text to create headers, images, links, etc.
+
+???
+
+- R Markdown presents text, as well as code with its output in the form of graphs or tables, for example. In essence, it's like a notebook.
+
+- R Markdown uses Markdown syntax
+
+- Markdown is a simple 'markup' language that uses plain text to create headers, images, links, etc.
+
+---
+
+class: inverse
+
+# .center[Where does R Markdown fit in?]
+
+<br>
+
+```{r echo=FALSE, out.width="90%", fig.align = "center"}
+
+knitr::include_graphics("figures/tidyverse.png")
+
+```
+
+---
+
+class: inverse
+
+# .center[Why is this useful?]
+
+<br>
+
+```{r echo=FALSE, out.width="50%", fig.align = "center"}
+
+knitr::include_graphics("figures/many_options.gif")
+
+```
+
+<br>
+
+### - Fully reproducible
+
+???
+
+- You will always get the same output when you use the same input and the same methods/analyses
+
+--
+
+### - Narrative text + code
+
+???
+
+- You can weave together narrative text and code to produce elegantly formatted output, all in one executable file
+
+--
+
+### - Multiple languages (40+): R, Python, SQL, ...
+
+???
+
+- You use multiple languages within one file
+
+--
+
+### - Static and dynamic output formats
+
+???
+
+- You can choose from dozens of static and dynamic output formats, including HTML, PDF, MS Word, HTML5 slides, books, websites, and more
+
+---
+
+class: inverse
+
+# .center[Most importantly!]
+
+<br>
+
+```{r echo=FALSE, out.width="60%", fig.align='center', fig.pos='h'}
+
+knitr::include_graphics("figures/important.gif")
+
+```
+
+<br>
+
+### - Many journals are signing the joint DART (Data Access & Research Transparency) initiative
+
+--
+
+### - Requires author(s) to hand over raw data and code that produced results
+
+--
+
+### - Manuscript only published if results are replicated successfully
+
+---
+
+class: inverse
+
+# .center[What else can R Markdown offer?]
+
+<br>
+
+```{r echo=FALSE, out.width="100%", fig.align = "center"}
+
+knitr::include_graphics("figures/rmarkdown_universe.jpg")
+
+```
+
+---
+
+class: inverse
+
+# .center[How-to...] 
+
+<br>
+
+.pull-left[.content.vmiddle[![](figures/Create_Rmarkdown.png)]]
+
+--
+
+.pull-right[.content.vmiddle[![](figures/New_Rmarkdown.png)]]
+
+???
+
+- We will leave the HTML default option, since you can easily convert HTML files to other formats later.
+
+- The newly created .Rmd file comes with basic instructions to help you get started.
+
+---
+
+class: inverse
+
+# .center[Anatomy of an R Markdown report]
+
+
+```{r echo=FALSE, out.width="20%", fig.align='center', fig.pos='h'}
+
+knitr::include_graphics("figures/skeleton.gif")
+
+```
+
+<br>
+
+### .purple[**YAML header:**] metadata that is needed to render the document  (i.e. produce an output file).
+
+--
+
+<br>
+
+### .purple[**Main body:**] text, which may include in-line code, written in R Markdown (plain text formatting) syntax.
+
+--
+
+<br>
+
+### .purple[**Code chunks:**] R (or other) code that can be executed when the document is knit/rendered.
+
+???
+
+- At the top of any RMarkdown script is a YAML header section enclosed by three dashes (---).
+    + By default this includes a title, author, date and the file type you want to output to. This is the minimum you should put in your header section.
+    + Rules in the header section will alter the whole document, i.e. it contains metadata that is needed to render the document.
+
+- The main body contains the text written in R Markdown syntax, which may include:
+    + Headers and/or sub-headers
+    + Mathematical equations
+    + In-line code
+    
+- The code chunks will contain R (or other) code that can be executed when the document is knit/rendered.
+
+---
+
+layout: false
+class: bg-main3 split-30 hide-slide-number
+
+.column[
+
+]
+
+.column.slide-in-right[.content.vmiddle[
+.sliderbox.inverse.pad1[
+.font5[YAML header]
+]
+]]
+
+---
+
+class: split-20 white
+
+.row.inverse[.content.vmiddle[
+
+# .center[Default YAML header]
+
+]]
+
+.row[.content[
+.split-two[
+
+.column.bg-main1[.content[
+
+![](figures/Default_YAML_header.png)
+
+<br>
+
+### .purple[**output:**] since we chose html format, this will be specified here 
+
+<br>
+
+### There are several other optional and cosmetic items that can be added to the YAML header, such as the font, font size, spacing, margins, themes, styling sheets, etc.
+
+]]
+
+
+.column.bg-main4[.content[
+
+![](figures/Default_YAML_header2.png)
+
+]]
+
+]]]
+
+???
+
+- The output of this default YAML header is displayed on the right.
+
+---
+
+class: split-20 white
+
+.row.inverse[.content.vmiddle[
+
+# .center[Custom YAML header]
+
+]]
+
+.row[.content[
+.split-two[
+
+.column.bg-main1[.content[
+
+![](figures/Customised_YAML_header.png)
+
+.purple[**author:**] Specify more authors by listing names and affiliations  
+
+.purple[**date:**] Retrieve date automatically from your system  
+
+.purple[**output:**] PDF document
+- Additional output-level options are specified underneath it, with a 2-space indent
+- .purple[**latex_engine:**] Document will be rendered with LaTeX
+- .purple[**keep_tex:**] The raw .blue[.tex] file will be rendered along with the PDF  
+
+.purple[**toc:**] A table of contents will be created.
+
+]]
+
+--
+
+.column.bg-main4[.content[
+
+```{r echo=FALSE, out.width="80%", fig.align='center'}
+
+knitr::include_graphics("figures/Customised_YAML_header2.png")
+
+```
+
+]]
+]]]
+
+
+???
+
+- Let's look at an example of a customised YAML header on the left:
+    + I have added a second author, and affilliations for both authors.
+    + Instead of "hard-coding" (typing out) the date, I made use of in-line R code to retrieve the date from my computer. In-line code is enclosed in a single pair of backticks. The "r" specifies that the code is written in R syntax. The sys.time() function is used to retrieve the date, which is then passed to the format function to output the date a in a specific format.
+    + In this case, I specified that I would like the output in PDF format, and I specified some additional output-level options with a 2-space indent. I also specified that I want to add a table of contents with numbered sections.
+    
+- The rendered file is shown on the right.
+
+---
+
+layout: false
+class: bg-main3 split-30 hide-slide-number
+
+.column[
+
+]
+
+.column.slide-in-right[.content.vmiddle[
+.sliderbox.inverse.pad1[
+.font5[Main body]
+]
+]]
+
+---
+
+class: split-20 white
+
+.row.inverse[.content.vmiddle[
+
+# .center[Add text]
+
+]]
+
+.row[.content[
+.split-two[
+.column.bg-main1[.content[
+
+`# This is a level 1 header`
+
+<br><br><br><br><br><br><br>
+
+`## This is a level 2 header`
+
+<br><br>
+
+`### This is a level 3 header`
+
+<br>
+
+`#### This starts a paragraph block`
+
+<br>
+
+`> This will create a block quote`
+
+]]
+
+
+.column.bg-main4[.content[
+
+# This is a level 1 header
+
+<br>
+
+## This is a level 2 header
+
+<br>
+
+### This is a level 3 header
+
+<br>
+
+#### This starts a paragraph block
+
+<br>
+
+> This will create a block quote
+
+]]
+]]]
+
+---
+
+class: split-20 white
+
+.row.inverse[.content.vmiddle[
+
+# .center[Format text]
+
+]]
+
+.row[.content[
+.split-two[
+
+.column.bg-main1[.content[
+
+`*italics*`  or  `_italics_`
+
+<br>
+
+`**bold**`  or  `__bold__`
+
+<br>
+
+`<u>underline</u>` with the `<u>` HTML tag
+
+<br>
+
+`X^superscript^`
+
+<br>
+
+`X~subscript~`
+
+<br>
+
+`Some text here. ^[This is a footnote]`<br>
+
+]]
+
+.column.bg-main4[.content[
+
+*italics*  or  _italics_
+
+<br>
+
+**bold**   or  __bold__
+
+<br><br>
+
+<u>underline</u> with the `<u>` HTML tag
+
+<br>
+
+X<sup>superscript</sup>
+
+<br>
+
+X<sub>subscript<sub>
+
+<br>
+
+Some text here. <sup>1</sup>  
+
+<sup>1</sup> This is a footnote.
+
+]]
+]]]
+
+---
+
+class: inverse
+
+# .center[Mathematical expressions]
+
+<br>
+
+### You can write LaTeX math expressions inside a pair of dollar signs.
+
+### .purple[In-line math expression]
+
+`$A = \pi*r^{2}$` renders $A = \pi*r^{2}$ 
+
+--
+
+<br>
+
+### .purple[Display style]
+
+```
+$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
+```
+
+$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
+
+--
+
+**Note:** No spaces after the opening `$` or before the closing `$`.  
+
+See [this document](https://www.calvin.edu/~rpruim/courses/s341/S17/from-class/MathinRmd.html) for mathematical notation.
+
+???
+
+- The $ symbols tell R markdown to use LaTeX equation syntax
+---
+
+class: split-20 white
+
+.row.inverse[.content.vmiddle[
+
+# .center[Add lists - unordered]
+
+]]
+
+.row[.content[
+.split-two[
+
+.column.bg-main1[.content[
+
+`- An`  
+`- Unordered`  
+`- List`  
+.transparent[xxxx]`+ Sub-item 1`  
+.transparent[xxxx]`+ Sub-item 2`  
+
+<br>
+
+`* Another`  
+`* Unordered`  
+`* List`  
+.transparent[xxxx]`+ Sub-item 1`  
+.transparent[xxxx]`+ Sub-item 2`  
+
+]]
+
+
+.column.bg-main4[.content[
+
+- An
+- Unordered
+- List
+    + Sub-item 1
+    + Sub-item 2
+
+<br><br><br>
+
+* Another
+* Unordered
+* List
+    + Sub-item 1
+    + Sub-item 2
+
+]]
+]]]
+
+---
+
+class: split-20 white
+
+.row.inverse[.content.vmiddle[
+
+# .center[Add lists - ordered/numerical]
+
+]]
+
+.row[.content[
+.split-two[
+
+.column.bg-main1[.content[
+
+`1. An`  
+`2. Ordered/numerical`  
+`3. List`  
+.transparent[xxxx]`+ Sub-item 1`  
+.transparent[xxxx]`+ Sub-item 2`
+
+<br>
+
+`a. Another`  
+`b. Ordered/numerical`  
+`c. List`  
+.transparent[xxxx]`+ Sub-item 1`  
+.transparent[xxxx]`+ Sub-item 2`
+
+]]
+
+
+.column.bg-main4[.content[
+
+1. An
+2. Ordered/numerical
+3. List
+    + Sub-item 1
+    + Sub-item 2
+    
+<br><br><br>
+
+1. Another
+2. Ordered/numerical
+3. List
+    + Sub-item 1
+    + Sub-item 2
+
+]]
+]]]
+
+---
+
+class: inverse
+
+# .center[Hyperlink text]
+
+<br>
+
+>`Check out the [RStudio website](https://rstudio.com) for many great resources.`
+
+<br><br>
+
+### Check out the [RStudio website](https://rstudio.com) for many great resources.
+
+<br>
+
+```{r echo=FALSE, out.width="50%", fig.align = "center"}
+
+knitr::include_graphics("figures/eye-animated.gif")
+
+```
+
+???
+
+Link text in square brackets [] followed by the link address in round parentheses ()
+
+---
+
+class: inverse
+
+# .center[Inline code]
+
+<br>
+
+```{r echo=FALSE, out.width="100%", fig.align = "center"}
+
+knitr::include_graphics("figures/Inline_code.png")
+
+```
+
+--
+
+### Here is an example of how I am using inline code to specify that today's date is `r format(Sys.time(), '%d %B %Y')`.
+
+--
+
+```{r echo=FALSE, out.width="80%", fig.align = "center"}
+
+knitr::include_graphics("figures/Dates.png")
+```
+
+???
+
+- Place code inline with a single pair of back ticks. The
+first back tick must be followed by the language (in this case R), then a single space and then the code.
+
+- Here is an example of what the R Markdown syntax looks like when combining text with inline code, and...
+
+- Here is the output.
+
+---
+
+layout: false
+class: bg-main3 split-30 hide-slide-number
+
+.column[
+
+]
+
+.column.slide-in-right[.content.vmiddle[
+.sliderbox.inverse.pad1[
+.font5[Code chunks]
+]
+]]
+
+---
+
+class: inverse
+
+# .center[Code chunks]
+
+<br>
+
+```{r echo=FALSE, out.width="100%", fig.align='center'}
+
+knitr::include_graphics("figures/Code_chunk_1.png")
+
+```
+
+<br>
+
+???
+
+- Start code chunk with three back ticks
+- Followed by an 'r' in curly braces (if you are writing the code in R syntax)
+- Within the curly braces you can optionally give your code chunk a name (which is very useful when you need to troubleshoot errors, or if you want to refer back to a specific code chunk), as well as some additional chunk rules/options
+- Within the code chunk it's just like a normal R script:
+    + You will have to load your data
+    + And install or load any packages needed for analyses
+    + You can display a dataframe, and
+    + Show a plot of your data
+- End the code chunk with another set of three back ticks
+
+---
+
+class: inverse
+
+# .center[Code chunks Rules/options/arguments]
+
+<br>
+
+### If you want to display the output without displaying the code in the final document, assign additional .purple[rules/options/arguments] for that code chunk
+
+<br>
+
+```{r echo=FALSE, out.width="100%", fig.align='center'}
+
+knitr::include_graphics("figures/Code_chunk_2.png")
+
+```
+
+???
+
+- If you add 'echo=FALSE', the code chunk will be evaluated and only the output will be displayed.
+- This is useful when you want to send a report to your supervisor, for example.
+- In an appendix you might rather want to display the code, but not the output. In that case you will specify 'eval=FALSE'.
+
+---
+
+class: inverse 
+
+# .center[Code chunks Rules/options/arguments]
+
+<br>
+
+![](figures/Chunk_options.PNG)
+
+
+#### See the .purple[[R Markdown Reference Guide](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)] and .purple[[this document](https://yihui.name/knitr/options/)] for a complete list of knitr chunk options.
+
+---
+
+class: inverse
+
+# .center[Code chunks Language]
+
+<br>
+
+### You can even switch between different .purple[languages] in the same R Markdown document
+
+<br>
+
+```{r echo=FALSE, out.width="100%", fig.align='center'}
+
+knitr::include_graphics("figures/Code_chunk_3.png")
+
+```
+
+<br>
+
+--
+
+### To see which languages (>40) are supported in *knitr*:
+
+```{r eval=FALSE, echo=TRUE}
+names(knitr::knit_engines$get())
+```
+
+---
+
+layout: false
+class: bg-main3 split-30 hide-slide-number
+
+.column[
+
+]
+
+.column.slide-in-right[.content.vmiddle[
+.sliderbox.inverse.pad1[
+.font5[Images & tables]
+]
+]]
+
+---
+
+class: inverse
+
+# .center[Insert images]
+
+<br>
+
+### .purple[1 - Insert figures saved locally - R Markdown]
+
+```{r echo=FALSE, out.width="100%", fig.align='center'}
+
+knitr::include_graphics("figures/Insert_image.png")
+
+```
+
+<br>
+
+![This is the caption for my image](figures/optical-illusion.jpg)
+
+- By default, RMarkdown will place graphs by maximising their height, while keeping them within the margins of the page and maintaining aspect ratio.
+
+---
+
+class: inverse
+
+# .center[Insert images]
+
+<br>
+
+### .purple[2 - Insert figures saved locally - code chunk]
+
+```{r echo=FALSE}
+
+knitr::include_graphics("figures/Insert_image3.png")
+
+```
+
+<br>
+
+```{r echo=FALSE, out.width='30%', fig.align='center', fig.cap='This is the caption for my image'}
+
+knitr::include_graphics("figures/optical-illusion.jpg")
+
+```
+
+???
+
+- To manually set the figure dimensions, insert instructions into the curly braces.
+
+---
+
+class: inverse
+
+# .center[Insert images]
+
+<br>
+
+### .purple[3 - Generate a figure from code and modify the dimensions]
+
+```{r echo=FALSE, out.width="100%", fig.align='center'}
+
+knitr::include_graphics("figures/Insert_image2.png")
+
+```
+
+```{r my_plot, fig.width=4.5, fig.height=3, fig.align='center', echo=FALSE, tidy=TRUE}
+
+# Attendees' age differences
+
+attendees <- c("Bianca", "Oliver", "Adele", "Anthony")
+age <- c(28, 32, 35, 40)
+dataframe <- data.frame(attendees, age)
+plot(dataframe)
+
+```
+
+
+???
+
+- Alternatively, you can generate a figure from code and modify the dimensions within the curly braces.
+
+---
+
+class: split-60
+
+.row.inverse[.content[# .center[Insert tables]
+
+<br>
+
+### .purple[   1 - Standard R Markdown]
+
+```{r echo=FALSE, out.width="40%", fig.align='center'}
+
+knitr::include_graphics("figures/Table_standard_r_markdown.png")
+
+```
+
+]]
+
+.row.white[.content.black[.center[
+
+```{r echo=FALSE}
+
+dataframe
+
+```
+
+]]]
+
+---
+
+class: split-60
+
+.row.inverse[.content[# .center[Insert tables]
+
+<br>
+
+### .purple[   2 - Create tables with markdown syntax]
+
+```{r echo=FALSE, out.width="60%", fig.align='center'}
+
+knitr::include_graphics("figures/Manual_markdown_table.png")
+
+```
+
+#### The position of the colons (":") indicate text-alignment
+
+]]
+
+.row.white[.content.black[
+
+<br>
+
+|Table Header|Second Header|Third Header|
+|:-----------|:-----------:|-----------:|
+|Cell 1      |Cell 2       |Cell 3      |
+|Cell 4      |Cell 5       |Cell 6      |
+
+]]
+
+???
+
+- By enclosing the name of the dataframe within a code chunk, R Markdown is able to print the contents, although this can look a bit messy.
+
+---
+
+class: split-60
+
+.row.inverse[.content[# .center[Insert tables]
+
+<br>
+
+### .purple[   3 - *kable()*  function from knitr package]
+
+```{r echo=FALSE, out.width="60%", fig.align='center'}
+
+knitr::include_graphics("figures/Table_kable.png")
+
+```
+
+]]
+
+.row.white[.content.black[
+
+<br>
+
+```{r echo=FALSE}
+
+knitr::kable(dataframe, 
+             align = c("l", "r"),
+             caption = "Ages of attendees",
+             format = "html")
+
+```
+
+]]
+
+---
+
+class: split-60
+
+.row.inverse[.content[# .center[Insert tables]
+
+<br>
+
+### .purple[   4 - *pander()*  function from pander package]
+
+```{r echo=FALSE, out.width="60%", fig.align='center'}
+
+knitr::include_graphics("figures/Table_pander.png")
+
+```
+
+<br>
+
+Note: .blue[*Pandoc*] should be pre-installed if you want to use .blue[*pander*]
+
+]]
+
+.row.white[.content.black[
+
+```{r echo=FALSE, out.width="30%", fig.align='center'}
+
+knitr::include_graphics("figures/Table_pander2.png")
+
+```
+
+]]
+
+???
+
+To install pandoc:
+- install.packages('installr')
+- library(installr)
+- install.pandoc()
+
+---
+
+layout: false
+class: bg-main3 split-30 hide-slide-number
+
+.column[
+
+]
+
+.column.slide-in-right[.content.vmiddle[
+.sliderbox.inverse.pad1[
+.font5[Advanced features]
+]
+]]
+
+---
+
+class: inverse
+
+# .center[Embed sub-documents]
+
+<br>
+
+### - You can build a document from sub-documents: *knitr* will integrate them into the output.
+
+--
+
+### - Sub-documents (aka child-documents) don't need complete YAML headers.
+
+--
+
+### - Add child documents with a code chunk, and include the document location in the label, e.g.
+
+```{r echo=FALSE, out.width="80%", fig.align = "center"}
+
+knitr::include_graphics("figures/Child_doc.png")
+```
+
+--
+
+### - Using multiple child documents helps you manage multiple sections in a long report in a convenient and tidy way.
+
+---
+
+class: inverse
+
+# .center[Add dynamic features]
+
+<br>
+
+.pull-left[.content[
+
+### .purple[Code folding]
+
+- Add .blue[code_folding: hide] to the YAML header below the .blue[output:] and .blue[html:] lines.
+    + HTML: Code will be hidden - `Code tab` available
+    + Word & PDF: Code not hidden
+
+<br>
+
+### .purple[Interactive data table]
+
+- Requires the .blue[Datatable (DT) package]
+- Only works for HTML output
+- User is able to filter and sort data
+
+]]
+
+
+.pull-right[.content[
+
+```{r echo=FALSE, out.width="100%", fig.align = "center"}
+
+knitr::include_graphics("figures/data_table.png")
+
+```
+
+]]
+
+---
+
+class: inverse
+
+# .center[Add parameters]
+
+
+### Allow the analysis/report to be .purple[customised] before knitting
+- Examples: 
+    + Show results for a specific geographic location
+    + Run a single analysis multiple times for different assumptions
+
+<br>
+
+--
+
+.pull-left[.content[
+### Add the following to the .purple[YAML header]:
+
+```{r echo=FALSE, out.width="100%", fig.align = "center"}
+
+knitr::include_graphics("figures/params.png")
+
+```
+
+]]
+
+--
+
+.pull-right[.content[
+### Add the following to the .purple[main body of text] wherever the institution should be inserted:
+```{r eval=FALSE, echo=TRUE}
+`r params$institution`
+```
+
+]]
+
+--
+
+>When you knit with parameters, the inline R code will automatically write the name of your selected institution.
+
+???
+
+- Parameters can do more than control text.
+- You can also use parameters to make changes to graphs, e.g. only plot the number of submissions to open access journals that don't charge fees.
+
+---
+
+class: inverse
+
+# .center[Autopopulate your Biosketch from ORCID]
+
+### .purple[Step 1: Authorise access to ORCID]
+
+```{r orcid-bio, eval=FALSE, echo=TRUE, tidy=TRUE}
+library ('rorcid')
+library('httpuv')
+
+token <- orcid_auth(scope = "/authenticate", reauth = FALSE, redirect_uri = getOption("rorcid.redirect_uri"))
+
+res <- orcid_bio(orcid = "0000-0001-6927-9159")
+bio <- res$'0000-0001-6927-9159'$'content'
+
+```
+
+<br>
+
+>1. A web browser will open at the ORCID web site.
+2. Log in to your account as usual.
+3. The variable .blue[token] will be added to the RStudio Environment - this is the authorisation code issued by ORCID that allows R and RStudio to read information from your ORCID account).
+
+---
+
+class: inverse
+
+# .center[Autopopulate your Biosketch from ORCID]
+
+### .purple[Step 2: Get token value]
+
+<br>
+
+### - In the R CONSOLE, type .blue[token] and press Enter
+
+--
+
+### - Copy and paste the token value (everything after .blue[BEARER]) that was printed to the console
+
+
+---
+
+class: inverse
+
+# .center[Autopopulate your Biosketch from ORCID]
+
+### .purple[Step 3: Create .Renviron file]
+
+### Run the following code in the .red[R CONSOLE]
+
+```{r eval=FALSE, echo=TRUE, tidy=TRUE}
+
+if(!file.exists("~/.Renviron")) {
+  file.create("~/.Renviron") 
+}
+
+file.edit("~/.Renviron")
+
+```
+
+<br>
+
+>1. A new text file (.Renviron) will open in RStudio.
+2. Type the following: .blue[ORCID_TOKEN="token value"] and paste your unique token value where .blue[token value] is indicated.
+3. Save this file - it will be saved in your computer's home directory.
+4. This file will be read every time you start R, thus enabling RStudio to communicate with ORCID to refresh or add data from your profile.
+
+---
+
+class: inverse
+
+# .center[Autopopulate your Biosketch from ORCID]
+
+### .purple[Step 4: Insert your ORCID bio]
+
+### Place the following code in your .red[.Rmd file]
+
+```{r eval=FALSE, echo=TRUE}
+
+`r bio`
+
+```
+
+<br>
+
+>When you knit the document, your biography from your ORCID profile will appear in the reproducible report.
+
+---
+
+layout: false
+class: bg-main3 split-30 hide-slide-number
+
+.column[
+
+]
+
+.column.slide-in-right[.content.vmiddle[
+.sliderbox.inverse.pad1[
+.font5[Generating the output file]
+]
+]]
+
+---
+
+class: inverse
+
+# .center[Compile .Rmd file]
+
+### .purple[1 - Using the interface: Press the Knit button in the taskbar]
+
+<br>
+
+--
+
+### .purple[2 - Programmatically: rmarkdown::render("Path/to/File.Rmd")]
+
+<br>
+
+--
+
+> R will:
+- Execute each embedded code chunk and insert the results into your report
+- Build a new version of your report in the output file type (in this case HTML)
+- Open a preview of the output file in the viewer pane
+- Save the output file in your working directory
+
+<br>
+
+--
+
+#### Note: TeX is required to create PDF output:
+
+- [Windows: MiKTeX (Complete)](http://miktex.org/2.9/setup)
+- [Mac OS X: MacTeX.pkg](http://tug.org/mactex/)
+- Linux: Use system package manager
+
+???
+
+- RStudio uses the LaTeX compiling system to make PDF documents.
+
+---
+
+layout: false
+class: bg-main3 split-30 hide-slide-number
+
+.column[
+
+]
+
+.column.slide-in-right[.content.vmiddle[
+.sliderbox.inverse.pad1[
+.font5[Publishing your reproducible report]
+]
+]]
+
+---
+
+class: inverse
+
+# .center[Publish via GitHub &nbsp;`r anicon::faa('github', animate='pulse')`]
+
+<br>
+
+### - Create / Log in to your GitHub account.
+
+--
+
+### - Create a new repository by initialising the repo with a README file.  
+
+--
+
+### - On your Desktop: Navigate to the .blue[.html] file you've just knitted, and rename to .blue[index.html].  
+
+--
+
+### - On GitHub: <br>
+- Click `Upload a file` - drag the `index.html` file to the box, then click the green button at the bottom.  
+- Go to settings, scroll down to the `GHPages` section, click the dropdown and select `master`.  
+- Scroll to the `GHPages` section and copy the github.io URL.  
+- Go back to the code section of the GitHub repo and add the URL. If you click on this link, you'll see your HTML report.
+
+--
+
+<br>
+
+>Note: you can add the .Rmd file to the GitHub repo and do version control via RStudio!
+
+---
+
+class: inverse
+
+# .center[Publish via `r anicon::cia('figures/rpubs.png', animate=FALSE)`]
+
+<br>
+
+### - Open your .Rmd document in RStudio and click .blue[knit].
+
+--
+
+### - In the item view pane, click on .blue[Publish]. You'll be redirected to the rpubs web site. You'll need to register if you don't have an rpubs account.
+
+--
+
+### - Your document is now published online.
+
+---
+
+class: inverse
+
+# .center[Publish via `r anicon::cia('figures/binder.png', animate=FALSE)`]
+
+<br>
+
+### - Copy all files used by knitr into your GitHub repo, but make a copy of your .Rmd file that doesn’t include the ORCID section (the authentication is complex).
+
+### - On GitHub:  
+
+- Create a `runtime.txt` file that contains: `r-2018-07-09`. This chooses a version of R at the date indicated.  
+
+- Create an `install.R` file that contains the following code:
+
+```
+install.packages("rmarkdown")
+install.packages("bitops")
+install.packages("caTools")
+install.packages("tidyverse")
+install.packages("DT")
+```
+
+---
+
+class: inverse
+
+# .center[Publish via `r anicon::cia('figures/binder.png', animate=FALSE)`]
+
+<br>
+
+- Edit the `README` file in Github and add:  [https://mybinder.org/v2/gh/github-username/github-repo/master?urlpath=rstudio]  
+    Replace `github-username` with your GitHub account name and `github-repo` with your GitHub repository name.  
+    
+- Click the Binder button and your environment will load (it might take up to 20 mins the first time).
+
+---
+
+layout: false
+class: bg-main3 split-30 hide-slide-number
+
+.column[
+
+]
+
+.column.slide-in-right[.content.vmiddle[
+.sliderbox.inverse.pad1[
+.font5[Writing manuscripts]
+]
+]]
+
+---
+
+class: inverse
+
+# .center[Journal styles/templates]
+
+<br>
+
+```{r eval=FALSE, echo=TRUE}
+# Install from CRAN
+install.packages("rticles")
+
+# Or install development version from GitHub
+devtools::install_github("rstudio/rticles") # recommended
+
+# Load package
+library(rticles)           
+
+# Show full list of available journal templates
+getNamespaceExports("rticles")
+```
+
+<br>
+
+### The .purple[rticles] package (J. Allaire, Xie, R Foundation, et al. 2019) is designed to simplify the creation of documents that conform to submission standards.
+
+---
+
+class: inverse
+
+# .center[How to access the templates]
+
+<br>
+
+## .purple[1 - Using the interface]
+
+<br>
+
+.pull-left[.content.vmiddle[![](figures/Create_Rmarkdown.png)]]
+
+--
+
+.pull-right[.content.vmiddle[![](figures/rticles_template.png)]]
+
+---
+
+class: inverse
+
+# .center[How to access the templates]
+
+<br>
+
+## .purple[2 - Programmatically]
+
+<br>
+
+```{r eval=FALSE, echo=TRUE}
+
+rmarkdown::draft("MyArticle.Rmd",
+                 template = "elsevier_article",
+                 package = "rticles")
+
+```
+
+<br>
+
+--
+
+- A new R Markdown file will be created, which will contain
+    + an extended YAML section compared to the basic R Markdown template, and
+    + some guidelines/instructions.  
+- You can add text, code chunks, images, tables, etc.
+
+---
+
+class: inverse
+
+# .center[A few things to keep in mind]
+
+<br>
+
+### - Although most journal styles are supported, it is not possible to match the journal's layout exactly   
+
+<br>
+
+--
+
+### - Check your journal's Guide for Authors for any journal-specific formatting requirements   
+
+<br>
+
+--
+
+### - Additional class files and templates may be available for more complex articles (e.g. single-column and double-column articles)   
+
+<br>
+
+--
+
+### - Some journals require a specific reference style, for which the relevant bibliographic style files for LaTeX may be downloaded from journal websites
+
+---
+
+class: inverse
+
+# .center[Importing references into your Mendeley library]
+
+<br>
+
+### Option 1: Get references in BibTeX format via Google Scholar
+
+```{r echo=FALSE, out.width="70%", fig.align = "center"}
+
+knitr::include_graphics("figures/bibtex.png")
+
+```
+
+<br>
+
+---
+
+class: inverse
+
+# .center[Importing references into your Mendeley library]
+
+<br>
+
+### Option 2: This [video](https://www.youtube.com/watch/?v=qRiAIaqdAOg) illustrates how to use the .blue[Mendely Web Importer] to import references directly from the internet into your online Mendeley library.
+
+
+---
+
+class: inverse
+
+# .center[Export Mendeley references to BibTeX]
+
+<br>
+
+### - First sync your .red[Online Mendeley Library] with your .blue[Desktop Mendeley Library].
+
+<br>
+
+--
+
+###  - Open Mendeley Desktop and select the files you wish to export.
+
+<br>
+
+--
+
+### - Go to the .blue[File] menu and select .blue[Export]. 
+
+<br>
+
+--
+
+### - Save as .blue[BibTeX] type and save to the same folder that contains your Article.Rmd file.
+
+<br>
+
+---
+
+class: inverse
+
+# .center[Create bibliography in your .Rmd file]
+
+## .purple[In-text citations]
+
+#### `@key` or `[@key]` where .blue[key] is the citation key assigned (in the .bib files) to the source you want to cite (e.g. @smith1994).
+
+`@smith1994` will produce .blue[Smith (1994)]  
+`[@smith1994]` will produce .blue[(Smith, 1994)]
+
+--
+
+>*Note:* you should have 2 .bib files - one for references and one for packages.
+- `references.bib` should contain references exported from Mendeley.
+- `packages.bib` can be generated by the following command:
+
+```{r eval=FALSE, echo=TRUE}
+write_bib(c("tidyverse", "rmarkdown", "knitr", "pander", "DT", "rorcid"),
+          file = "packages.bib")
+```
+
+<br>
+
+---
+
+class: inverse
+
+# .center[Create bibliography in your .Rmd file]
+
+<br>
+
+## .purple[References]
+
+### A reference list will be automatically generated at the end of the document according to the citation style indicated in the YAML header.  
+
+```{r echo=FALSE, out.width="50%", fig.align = "center"}
+
+knitr::include_graphics("figures/magic.gif")
+
+```
+
+---
+
+class: inverse
+
+# .center[Submitting your manuscript]
+
+<br>
+
+### - Most journals accept a PDF of your manuscript at initial submission.
+
+--
+
+### - When you are asked to submit your manuscript source files, do the following:  
+
+--
+
+### - Build a PDF of your manuscript source files on your computer and attach it with item type 'Manuscript'.  
+
+--
+
+### - Bundle all manuscript source files in a single archive (.zip) and attach it with item type 'LaTeX source files'.  
+
+--
+
+### - Source files include LaTeX files, BibTeX files, figures, tables, all LaTeX classes and packages that are not included in TeX Live and any other material that belongs to your manuscript.  
+
+---
+
+layout: false
+class: bg-main3 split-30 hide-slide-number
+
+.column[
+
+]
+
+.column.slide-in-right[.content.vmiddle[
+.sliderbox.inverse.pad1[
+.font5[Disadvantages]
+]
+]]
+
+---
+
+class: inverse
+
+# .center[Not as intuitive as Microsoft Word]
+
+```{r echo=FALSE, out.width="70%", fig.align = "center"}
+
+knitr::include_graphics("figures/Mword.jpg")
+
+```
+
+---
+
+class: inverse
+
+# .center[It doesn't have clippy]
+
+```{r echo=FALSE, out.width="80%", fig.align = "center"}
+
+knitr::include_graphics("figures/clippy2.jpg")
+
+```
+
+---
+
+layout: false
+class: bg-main3 split-30 hide-slide-number
+
+.column[
+
+]
+
+.column.slide-in-right[.content.vmiddle[
+.sliderbox.inverse.pad1[
+.font5[Acknowledgements]
+]
+]]
+
+---
+
+class: inverse
+
+<br>
+
+### Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+<br>
+
+### Material compiled from: 
+- The [Coding Club: Getting Started with R Markdown](https://ourcodingclub.github.io/2016/11/24/rmarkdown-1.html) licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/)
+- [Author Carpentry](https://authorcarpentry.github.io/executable-documents-rstudio/01-markdown.html) licensed under a [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/)
+- [R for Data Science, Chapter 27](https://r4ds.had.co.nz/r-markdown.html)
+- [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
+- [RStudio website](https://rmarkdown.rstudio.com/authoring_quick_tour.html) 
+- [RStudio lesson](https://rmarkdown.rstudio.com/lesson-1.html)
+- [An R Markdown Template for Academic Manuscripts](http://svmiller.com/blog/2016/02/svm-r-markdown-manuscript/) written by Steven V. Miller ([@svmiller](https://github.com/svmiller/svm-r-markdown-templates) on GitHub) with written permission
+- [RMarkdown for writing reproducible scientific papers](https://libscie.github.io/rmarkdown-workshop/handout.html) written by Mike Frank & Chris Hartgerink
+
+---
+
+class: inverse
+
+<br>
+
+```{r echo=FALSE, out.width="100%", fig.align = "center"}
+
+knitr::include_graphics("figures/thank-you2.gif")
+
+```
+
+---
+
+class: inverse
+
+<br>
+
+```{r echo=FALSE, out.width="100%", fig.align = "center"}
+
+knitr::include_graphics("figures/your_turn.gif")
+
+```
