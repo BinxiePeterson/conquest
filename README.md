@@ -2,4 +2,4 @@
 
 ## Teaching material
 
-This is a new repository - testing phase.
+This is a new repository.
